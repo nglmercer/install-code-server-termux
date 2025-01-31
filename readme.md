@@ -1,3 +1,24 @@
+## Prerequisites
+- update and upgrade pkg ```pkg update && pkg upgrade -y```
+- install git `pkg install git`
+
+## how install
+- clone installcodeserver.sh `git clone https://github.com/nglmercer/install-code-server-termux/installcodeserver.sh`
+- chmod +x ./installcodeserver.sh
+- ./installcodeserver.sh
+
+## how start server
+- clone startcodeserver.sh `git clone https://github.com/nglmercer/install-code-server-termux/startcodeserver.sh`
+- chmod +x ./startcodeserver.sh
+- ./startcodeserver.sh
+
+
+## optional install manually
+- install nano `pkg install nano`
+- create script example `nano startcodeserver.sh`
+- paste code and save with ` crtl + s  ` and exit ` crtl + k  `
+- add permision `chmod +x startcodeserver.sh`
+- execute `./startcodeserver.sh`
 startcodeserver.sh
 ```
 #!/data/data/com.termux/files/usr/bin/bash
