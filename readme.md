@@ -4,12 +4,12 @@
 - install git `pkg install git`
 
 ## how install
-- clone installcodeserver.sh `git clone https://github.com/nglmercer/install-code-server-termux/blob/main/installcodeserver.sh`
+- clone installcodeserver.sh `git clone https://github.com/nglmercer/install-code-server-termux/blob/main/installcodeserver.git`
 - chmod +x ./installcodeserver.sh
 - ./installcodeserver.sh
 
 ## how start server
-- clone startcodeserver.sh `git clone https://github.com/nglmercer/install-code-server-termux/blob/main/startcodeserver.sh`
+- clone startcodeserver.sh `git clone https://github.com/nglmercer/install-code-server-termux/blob/main/startcodeserver.git`
 - chmod +x ./startcodeserver.sh
 - ./startcodeserver.sh
 
