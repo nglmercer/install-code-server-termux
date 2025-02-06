@@ -21,18 +21,14 @@
 1. Download and execute the installation script directly:
    ```bash
    curl -sL https://raw.githubusercontent.com/nglmercer/install-code-server-termux/main/installcodeserver.sh | bash
-   ```
-   or
-   ```bash
+
    wget -qO- https://raw.githubusercontent.com/nglmercer/install-code-server-termux/main/installcodeserver.sh | bash
    ```
 
 2. Start the server:
    ```bash
    curl -sL https://raw.githubusercontent.com/nglmercer/install-code-server-termux/main/startcodeserver.sh | bash
-   ```
-   or
-   ```bash
+
    wget -qO- https://raw.githubusercontent.com/nglmercer/install-code-server-termux/main/startcodeserver.sh | bash
    ```
 
