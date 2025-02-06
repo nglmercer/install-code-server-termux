@@ -17,12 +17,7 @@ instalar_code_server() {
 # Verificar si code-server ya está instalado
 if command -v code-server &> /dev/null; then
     echo "code-server ya está instalado."
-    read -p "¿Deseas reinstalarlo? (s/n): " respuesta
-    if [[ "$respuesta" == "s" || "$respuesta" == "S" ]]; then
-        instalar_code_server
-    else
-        echo "Reinstalación cancelada."
-    fi
+    instalar_code_server
 else
     echo "code-server no está instalado. Procediendo con la instalación..."
     instalar_code_server
