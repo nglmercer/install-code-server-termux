@@ -1,6 +1,4 @@
----
-
-## **Instructions (English)**
+## **Instructions**
 
 ### Prerequisites
 - **Termux App**: Official repository [Termux App](https://github.com/termux/termux-app).
@@ -13,7 +11,6 @@
   pkg install git -y
   ```
 
----
 
 ### Installation Options
 
