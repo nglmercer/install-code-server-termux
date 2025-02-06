@@ -1,4 +1,5 @@
 ## Prerequisites
+### termux-app official repository https://github.com/termux/termux-app
 - update and upgrade pkg ```pkg update && pkg upgrade -y```
 - install git `pkg install git`
 
