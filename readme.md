@@ -1,26 +1,100 @@
-## Prerequisites
-### termux-app official repository https://github.com/termux/termux-app
-- update and upgrade pkg ```pkg update && pkg upgrade -y```
-- install git `pkg install git`
+---
 
-## how install
-- clone installcodeserver.sh `git clone https://github.com/nglmercer/install-code-server-termux/blob/main/installcodeserver.git`
-- chmod +x ./installcodeserver.sh
-- ./installcodeserver.sh
+## **Instructions (English)**
 
-## how start server
-- clone startcodeserver.sh `git clone https://github.com/nglmercer/install-code-server-termux/blob/main/startcodeserver.git`
-- chmod +x ./startcodeserver.sh
-- ./startcodeserver.sh
+### Prerequisites
+- **Termux App**: Official repository [Termux App](https://github.com/termux/termux-app).
+- Update and upgrade packages:
+  ```bash
+  pkg update && pkg upgrade -y
+  ```
+- Install Git:
+  ```bash
+  pkg install git -y
+  ```
 
+---
 
-## optional install manually
-- install nano `pkg install nano`
-- create script example `nano startcodeserver.sh`
-- paste code and save with ` crtl + s  ` and exit ` crtl + k  `
-- add permision `chmod +x startcodeserver.sh`
-- execute `./startcodeserver.sh`
-startcodeserver.sh
+### Installation Options
+
+#### **Option 1: Using `curl` or `wget`**
+1. Download and execute the installation script directly:
+   ```bash
+   curl -sL https://raw.githubusercontent.com/nglmercer/install-code-server-termux/main/installcodeserver.sh | bash
+   ```
+   or
+   ```bash
+   wget -qO- https://raw.githubusercontent.com/nglmercer/install-code-server-termux/main/installcodeserver.sh | bash
+   ```
+
+2. Start the server:
+   ```bash
+   curl -sL https://raw.githubusercontent.com/nglmercer/install-code-server-termux/main/startcodeserver.sh | bash
+   ```
+   or
+   ```bash
+   wget -qO- https://raw.githubusercontent.com/nglmercer/install-code-server-termux/main/startcodeserver.sh | bash
+   ```
+
+---
+
+#### **Option 2: Cloning the Repository**
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/nglmercer/install-code-server-termux.git
+   cd install-code-server-termux
+   ```
+
+2. Make the scripts executable:
+   ```bash
+   chmod +x installcodeserver.sh startcodeserver.sh
+   ```
+
+3. Run the installation script:
+   ```bash
+   ./installcodeserver.sh
+   ```
+
+4. Start the server:
+   ```bash
+   ./startcodeserver.sh
+   ```
+
+---
+
+### Optional: Manual Installation
+1. Install a text editor (e.g., Nano):
+   ```bash
+   pkg install nano -y
+   ```
+
+2. Create a script file:
+   ```bash
+   nano startcodeserver.sh
+   ```
+
+3. Paste the following code into the file:
+   ```bash
+   #!/bin/bash
+   code-server
+   ```
+
+4. Save and exit:
+   - Press `CTRL + S` to save.
+   - Press `CTRL + X` to exit.
+
+5. Make the script executable:
+   ```bash
+   chmod +x startcodeserver.sh
+   ```
+
+6. Run the script:
+   ```bash
+   ./startcodeserver.sh
+   ```
+
+---
+
 ```
 #!/data/data/com.termux/files/usr/bin/bash
 
