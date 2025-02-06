@@ -54,6 +54,12 @@
    ```
 
 ---
+###
+install with tur-repo
+```bash
+pkg install tur-repo
+pkg install code-server
+```
 
 ### Optional: Manual Installation
 1. Install a text editor (e.g., Nano):
@@ -87,7 +93,7 @@
    ```
 
 ---
-
+./startcodeserver
 ```
 #!/data/data/com.termux/files/usr/bin/bash
 
@@ -167,3 +173,4 @@ else
     instalar_code_server
 fi
 ```
+---
