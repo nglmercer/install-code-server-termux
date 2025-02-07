@@ -10,6 +10,10 @@
   ```bash
   pkg install git -y
   ```
+- Install wget:
+  ```bash
+  pkg install wget -y
+  ```
 
 
 ### Installation Options
@@ -24,11 +28,15 @@
 
 2. Start the server:
    ```bash
-   curl -sL https://raw.githubusercontent.com/nglmercer/install-code-server-termux/main/startcodeserver.sh | bash
-
-   wget -qO- https://raw.githubusercontent.com/nglmercer/install-code-server-termux/main/startcodeserver.sh | bash
-   ```
-
+   curl https://raw.githubusercontent.com/nglmercer/install-code-server-termux/main/startcodeserver.sh
+   chmod +x ./startcodeserver.sh
+   ./startcodeserver.sh
+    ```
+   ```bash
+   wget https://raw.githubusercontent.com/nglmercer/install-code-server-termux/main/startcodeserver.sh
+   chmod +x ./startcodeserver.sh
+   ./startcodeserver.sh
+     ```
 ---
 
 #### **Option 2: Cloning the Repository**
