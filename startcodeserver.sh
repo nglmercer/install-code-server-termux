@@ -5,8 +5,15 @@ CONFIG_DIR="$HOME/.config/code-server"
 KEY_FILE="$CONFIG_DIR/selfsigned.key"
 CERT_FILE="$CONFIG_DIR/selfsigned.crt"
 
-# Puerto inicial
-PORT=8081
+# Preguntar al usuario si quiere cambiar el puerto
+echo "Puerto predeterminado: 8080. ¿Desea cambiarlo? (s/n)"
+read -r change_port
+if [[ "$change_port" == "s" ]]; then
+    echo "Ingrese el nuevo puerto:"
+    read -r PORT
+else
+    PORT=8080
+fi
 
 # Verificar si code-server está instalado
 if ! command -v code-server &> /dev/null; then
@@ -15,12 +22,14 @@ if ! command -v code-server &> /dev/null; then
 fi
 
 # Buscar un puerto disponible
-while lsof -i:$PORT &> /dev/null; do
-    PORT=$((PORT + 1))
+tmp_port=$PORT
+while lsof -i:$tmp_port &> /dev/null; do
+    tmp_port=$((tmp_port + 1))
 done
+PORT=$tmp_port
 
-# Obtener la IP local (evita loopback 127.0.0.1)
-IP_LOCAL=$(ip -4 addr show wlan0 | grep -oP '(?<=inet\s)\d+(\.\d+){3}' | head -n 1)
+# Obtener la IP local del dispositivo (evita loopback 127.0.0.1)
+IP_LOCAL=$(ip -o -4 addr show wlan0 | awk '{print $4}' | cut -d'/' -f1)
 
 # Si sigue sin obtener la IP, asignar localhost como última opción
 if [[ -z "$IP_LOCAL" ]]; then
@@ -38,16 +47,22 @@ else
     PROTOCOL="http"
 fi
 
-# Esperar a que el servidor inicie
-sleep 2
+# Preguntar al usuario si quiere habilitar dnsmasq
+echo "¿Desea habilitar un DNS local con dnsmasq? (s/n)"
+read -r enable_dns
+if [[ "$enable_dns" == "s" ]]; then
+    DNS_NAME="codeserver.local"
+    echo "address=/$DNS_NAME/$IP_LOCAL" | tee $HOME/.termux_dns.conf
 
-# Crear un mDNS para acceder fácilmente (Requiere avahi)
-if command -v avahi-publish-service &> /dev/null; then
-    avahi-publish-service "code-server" _http._tcp $PORT &
-    echo "Servicio publicado como http://code-server.local:$PORT"
+    # Verificar si dnsmasq está instalado
+    if ! command -v dnsmasq &> /dev/null; then
+        echo "Instalando dnsmasq..."
+        pkg install dnsmasq -y
+    fi
+
+    # Iniciar dnsmasq con la configuración local
+    dnsmasq --no-resolv --no-poll --address=/$DNS_NAME/$IP_LOCAL &
+    echo "code-server se está ejecutando en $PROTOCOL://$DNS_NAME:$PORT"
 else
-    echo "No se encontró avahi-publish-service. Puedes acceder en $PROTOCOL://$IP_LOCAL:$PORT"
+    echo "code-server se está ejecutando en $PROTOCOL://$IP_LOCAL:$PORT"
 fi
-
-# Mostrar información al usuario
-echo "code-server se está ejecutando en $PROTOCOL://$IP_LOCAL:$PORT"
