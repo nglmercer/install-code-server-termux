@@ -6,7 +6,7 @@ KEY_FILE="$CONFIG_DIR/selfsigned.key"
 CERT_FILE="$CONFIG_DIR/selfsigned.crt"
 
 # Puerto inicial
-PORT=8080
+PORT=8081
 
 # Verificar si code-server está instalado
 if ! command -v code-server &> /dev/null; then
@@ -16,12 +16,11 @@ fi
 
 # Buscar un puerto disponible
 while lsof -i:$PORT &> /dev/null; do
-    echo "El puerto $PORT está en uso por otro programa. Probando con el puerto $((PORT + 1))..."
     PORT=$((PORT + 1))
 done
 
-# Obtener la IP local del dispositivo (evita loopback 127.0.0.1)
-IP_LOCAL=$(ifconfig | awk '/inet / && !/127.0.0.1/ {print $2}' | head -n 1)
+# Obtener la IP local (evita loopback 127.0.0.1)
+IP_LOCAL=$(ip -4 addr show wlan0 | grep -oP '(?<=inet\s)\d+(\.\d+){3}' | head -n 1)
 
 # Si sigue sin obtener la IP, asignar localhost como última opción
 if [[ -z "$IP_LOCAL" ]]; then
@@ -39,14 +38,15 @@ else
     PROTOCOL="http"
 fi
 
-# Configurar un nombre de host local usando avahi-publish (si está disponible)
-HOSTNAME="code-server"
-if command -v avahi-publish &> /dev/null; then
-    avahi-publish -a "$HOSTNAME.local" "$IP_LOCAL" &
-    echo "DNS local configurado. Puedes acceder a code-server en: $PROTOCOL://$HOSTNAME.local:$PORT"
+# Esperar a que el servidor inicie
+sleep 2
+
+# Crear un mDNS para acceder fácilmente (Requiere avahi)
+if command -v avahi-publish-service &> /dev/null; then
+    avahi-publish-service "code-server" _http._tcp $PORT &
+    echo "Servicio publicado como http://code-server.local:$PORT"
 else
-    echo "avahi-publish no está instalado. No se pudo configurar un DNS local."
-    echo "Puedes acceder a code-server en: $PROTOCOL://$IP_LOCAL:$PORT"
+    echo "No se encontró avahi-publish-service. Puedes acceder en $PROTOCOL://$IP_LOCAL:$PORT"
 fi
 
 # Mostrar información al usuario
