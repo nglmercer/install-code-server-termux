@@ -14,7 +14,6 @@ cleanup() {
         kill $CODE_SERVER_PID 2>/dev/null
         rm -f "$PID_FILE"
     fi
-    exit 0
 }
 
 # Registrar la función de limpieza para señales de terminación
