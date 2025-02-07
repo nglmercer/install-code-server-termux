@@ -28,8 +28,8 @@ while lsof -i:$tmp_port &> /dev/null; do
 done
 PORT=$tmp_port
 
-# Obtener la IP local del dispositivo (evita loopback 127.0.0.1)
-IP_LOCAL=$(ip -o -4 addr show wlan0 | awk '{print $4}' | cut -d'/' -f1)
+# Obtener la IP local del dispositivo en Termux (evita loopback 127.0.0.1)
+IP_LOCAL=$(ifconfig wlan0 | grep 'inet ' | awk '{print $2}')
 
 # Si sigue sin obtener la IP, asignar localhost como última opción
 if [[ -z "$IP_LOCAL" ]]; then
@@ -48,6 +48,7 @@ else
 fi
 
 # Preguntar al usuario si quiere habilitar dnsmasq
+echo "code-server se está ejecutando en $PROTOCOL://$IP_LOCAL:$PORT"
 echo "¿Desea habilitar un DNS local con dnsmasq? (s/n)"
 read -r enable_dns
 if [[ "$enable_dns" == "s" ]]; then
