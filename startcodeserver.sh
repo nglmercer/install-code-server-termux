@@ -4,20 +4,9 @@
 CONFIG_DIR="$HOME/.config/code-server"
 KEY_FILE="$CONFIG_DIR/selfsigned.key"
 CERT_FILE="$CONFIG_DIR/selfsigned.crt"
-PID_FILE="/tmp/code-server.pid"
 
-# Función para limpiar al salir
-cleanup() {
-    if [ -f "$PID_FILE" ]; then
-        CODE_SERVER_PID=$(cat "$PID_FILE")
-        echo "Cerrando code-server (PID: $CODE_SERVER_PID)..."
-        kill $CODE_SERVER_PID 2>/dev/null
-        rm -f "$PID_FILE"
-    fi
-}
-
-# Registrar la función de limpieza para señales de terminación
-trap cleanup SIGINT SIGTERM EXIT
+# Puerto inicial
+PORT=8080
 
 # Verificar si code-server está instalado
 if ! command -v code-server &> /dev/null; then
@@ -25,17 +14,23 @@ if ! command -v code-server &> /dev/null; then
     exit 1
 fi
 
-# Puerto inicial
-PORT=8080
-MAX_PORT=8180  # Límite máximo de puerto a intentar
+# Función para verificar qué proceso está usando un puerto
+check_port_usage() {
+    local port=$1
+    local process_info=$(lsof -i:$port 2>/dev/null)
+    if [ ! -z "$process_info" ]; then
+        local process_name=$(echo "$process_info" | tail -n 1 | awk '{print $1}')
+        local pid=$(echo "$process_info" | tail -n 1 | awk '{print $2}')
+        echo "El puerto $port está siendo usado por el proceso $process_name (PID: $pid)"
+        return 1
+    fi
+    return 0
+}
 
 # Buscar un puerto disponible
-while lsof -i:$PORT &> /dev/null; do
+while ! check_port_usage $PORT; do
+    echo "Intentando con el puerto $((PORT + 1))..."
     PORT=$((PORT + 1))
-    if [ $PORT -gt $MAX_PORT ]; then
-        echo "No se encontró ningún puerto disponible entre 8080 y $MAX_PORT"
-        exit 1
-    fi
 done
 
 # Obtener la IP local del dispositivo (evita loopback 127.0.0.1)
@@ -57,12 +52,5 @@ else
     PROTOCOL="http"
 fi
 
-# Guardar el PID del proceso
-echo $! > "$PID_FILE"
-
 # Mostrar información al usuario
 echo "code-server se está ejecutando en $PROTOCOL://$IP_LOCAL:$PORT"
-echo "Presiona Ctrl+C para detener el servidor"
-
-# Mantener el script en ejecución
-wait
